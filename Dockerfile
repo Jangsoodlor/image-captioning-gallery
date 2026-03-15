@@ -10,4 +10,4 @@ COPY image_captioning.py .
 COPY gunicorn.conf.py .
 COPY templates/ templates/
 EXPOSE 5000
-CMD ["gunicorn", "app3:app", "-c", "gunicorn.conf.py"]
+CMD ["gunicorn", "app:app", "-c", "gunicorn.conf.py"]

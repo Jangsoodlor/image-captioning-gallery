@@ -1,8 +1,11 @@
 # Image Captioning Gallery
 
-A web-based gallery that can generates image captioning for pictures.
+A web-based gallery that can generates image captioning for uploaded images.
 
-## How to install
+The image caption is computed at the time of the upload, and saved to .json file
+for display later. 
+
+## How to install?
 
 ### Docker
 
@@ -23,8 +26,9 @@ pip install -r requirements.txt
 ```bash
 docker compose up
 ```
+
 ### Manually
 
 ```bash
-python app3.py
+python app.py
 ```
