@@ -1,310 +1,657 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Caption Generator</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-        
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        
-        .content {
-            padding: 40px;
-        }
-        
-        .upload-area {
-            border: 3px dashed #ddd;
-            border-radius: 10px;
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .upload-area:hover {
-            border-color: #4facfe;
-            background: #f8fbff;
-        }
-        
-        .upload-area.dragover {
-            border-color: #4facfe;
-            background: #f0f8ff;
-            transform: scale(1.02);
-        }
-        
-        .upload-icon {
-            font-size: 3em;
-            color: #ddd;
-            margin-bottom: 15px;
-        }
-        
-        .upload-text {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 15px;
-        }
-        
-        .file-input {
-            display: none;
-        }
-        
-        .btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
-        }
-        
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #4facfe;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .result {
-            display: none;
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 30px;
-            margin-top: 30px;
-        }
-        
-        .result-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .caption {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #4facfe;
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #333;
-        }
-        
-        .error {
-            background: #ffe6e6;
-            color: #d8000c;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border-left: 4px solid #d8000c;
-        }
-        
-        .file-info {
-            background: #e8f4f8;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: #666;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Captioning Gallery</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 15px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.1em;
+      color: #666;
+    }
+
+    .content {
+      background: white;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-section {
+      margin-bottom: 40px;
+    }
+
+    .upload-area {
+      border: 3px dashed #ddd;
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .upload-area:hover {
+      border-color: #4facfe;
+      background: #f8fbff;
+    }
+
+    .upload-area.dragover {
+      border-color: #4facfe;
+      background: #f0f8ff;
+      transform: scale(1.02);
+    }
+
+    .upload-icon {
+      font-size: 3em;
+      color: #ddd;
+      margin-bottom: 15px;
+    }
+
+    .upload-text {
+      font-size: 1.2em;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+      padding: 10px 20px;
+      font-size: 0.95em;
+    }
+
+    .btn-delete:hover {
+      box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn-close-modal {
+      background: #999;
+      padding: 8px 16px;
+      font-size: 0.9em;
+      margin-right: 10px;
+    }
+
+    .btn-close-modal:hover {
+      box-shadow: 0 10px 20px rgba(153, 153, 153, 0.3);
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #4facfe;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .file-info {
+      background: #e8f4f8;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: #666;
+      display: none;
+    }
+
+    .error {
+      background: #ffe6e6;
+      color: #d8000c;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border-left: 4px solid #d8000c;
+      display: none;
+    }
+
+    .gallery-section {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 2px solid #eee;
+    }
+
+    .gallery-title {
+      font-size: 1.8em;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .gallery-empty {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 1.1em;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery-item {
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .gallery-item-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-item-info {
+      padding: 15px;
+    }
+
+    .gallery-item-caption {
+      font-size: 0.95em;
+      color: #666;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: auto;
+      padding: 0;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 700px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      padding: 20px;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 15px 15px 0 0;
+    }
+
+    .modal-title {
+      font-size: 1.3em;
+      font-weight: 500;
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
+      color: white;
+      font-size: 1.5em;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .modal-body {
+      padding: 30px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      max-height: 400px;
+      object-fit: contain;
+    }
+
+    .modal-caption {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      border-left: 4px solid #4facfe;
+      font-size: 1.05em;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .modal-footer {
+      padding: 20px 30px;
+      background: #f8f9fa;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      border-radius: 0 0 15px 15px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .gallery-loading {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .gallery-loading .spinner {
+      margin-bottom: 15px;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Image Caption Generator</h1>
-            <p>Upload an image and let AI describe what it sees</p>
-        </div>
-        
-        <div class="content">
-            <form id="uploadForm" enctype="multipart/form-data">
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">+</div>
-                    <div class="upload-text">Click to select an image or drag and drop</div>
-                    <input type="file" id="fileInput" class="file-input" accept="image/*">
-                    <button type="button" class="btn" onclick="document.getElementById('fileInput').click()">
-                        Choose Image
-                    </button>
-                </div>
-                
-                <div id="fileInfo" class="file-info" style="display: none;"></div>
-                
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p>Generating caption... This may take a few moments.</p>
-                </div>
-                
-                <div class="result" id="result">
-                    <img id="resultImage" class="result-image" alt="Uploaded image">
-                    <div class="caption" id="caption"></div>
-                </div>
-                
-                <div id="error" class="error" style="display: none;"></div>
-            </form>
-        </div>
+  <div class="container">
+    <div class="header">
+      <h1>🖼️ Image Captioning Gallery</h1>
+      <p>Upload images and let AI generate captions for you</p>
     </div>
 
-    <script>
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const fileInfo = document.getElementById('fileInfo');
-        const loading = document.getElementById('loading');
-        const result = document.getElementById('result');
-        const error = document.getElementById('error');
-        
-        // Drag and drop functionality
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-        
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFileSelect(files[0]);
-            }
-        });
-        
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFileSelect(e.target.files[0]);
-            }
-        });
-        
-        function handleFileSelect(file) {
-            // Validate file type
-            if (!file.type.startsWith('image/')) {
-                showError('Please select an image file.');
-                return;
-            }
-            
-            // Validate file size (16MB max)
-            if (file.size > 16 * 1024 * 1024) {
-                showError('File size must be less than 16MB.');
-                return;
-            }
-            
-            // Show file info
-            fileInfo.innerHTML = `
+    <div class="content">
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <form id="uploadForm" enctype="multipart/form-data">
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">+</div>
+            <div class="upload-text">Click to select an image or drag and drop</div>
+            <input type="file" id="fileInput" class="file-input" accept="image/*">
+            <button type="button" class="btn" onclick="document.getElementById('fileInput').click()">
+              Choose Image
+            </button>
+          </div>
+
+          <div id="fileInfo" class="file-info"></div>
+          <div id="uploadLoading" class="loading">
+            <div class="spinner"></div>
+            <p>Generating caption... This may take a few moments.</p>
+          </div>
+          <div id="uploadError" class="error"></div>
+        </form>
+      </div>
+
+      <!-- Gallery Section -->
+      <div class="gallery-section">
+        <h2 class="gallery-title">Your Gallery</h2>
+
+        <div id="galleryLoading" class="gallery-loading">
+          <div class="spinner"></div>
+          <p>Loading gallery...</p>
+        </div>
+
+        <div id="galleryEmpty" class="gallery-empty" style="display: none;">
+          No images yet. Start by uploading your first image!
+        </div>
+
+        <div id="gallery" class="gallery-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Image Details</div>
+        <button type="button" class="modal-close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img id="modalImage" class="modal-image" alt="Gallery image">
+        <div class="modal-caption" id="modalCaption"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-close-modal" onclick="closeModal()">Close</button>
+        <button type="button" class="btn btn-delete" onclick="deleteImage()">Delete Image</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentImage = null;
+
+    // Initialize gallery on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadGallery();
+      setupUploadArea();
+    });
+
+    // Setup drag and drop for upload
+    function setupUploadArea() {
+      const uploadArea = document.getElementById('uploadArea');
+      const fileInput = document.getElementById('fileInput');
+
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
+
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+      });
+
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFileSelect(files[0]);
+        }
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          handleFileSelect(e.target.files[0]);
+        }
+      });
+    }
+
+    function handleFileSelect(file) {
+      const uploadError = document.getElementById('uploadError');
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showUploadError('Please select an image file.');
+        return;
+      }
+
+      // Validate file size (16MB max)
+      if (file.size > 16 * 1024 * 1024) {
+        showUploadError('File size must be less than 16MB.');
+        return;
+      }
+
+      // Show file info
+      const fileInfo = document.getElementById('fileInfo');
+      fileInfo.innerHTML = `
                 <strong>Selected:</strong> ${file.name} 
                 <span style="color: #999;">(${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
             `;
-            fileInfo.style.display = 'block';
-            
-            // Upload file
-            uploadFile(file);
+      fileInfo.style.display = 'block';
+      uploadError.style.display = 'none';
+
+      // Upload file
+      uploadFile(file);
+    }
+
+    function uploadFile(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const loading = document.getElementById('uploadLoading');
+      loading.style.display = 'block';
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          loading.style.display = 'none';
+
+          if (data.success) {
+            // Reset form
+            document.getElementById('uploadForm').reset();
+            document.getElementById('fileInfo').style.display = 'none';
+
+            // Reload gallery
+            loadGallery();
+          } else {
+            showUploadError(data.error || 'An error occurred while processing the image.');
+          }
+        })
+        .catch(err => {
+          loading.style.display = 'none';
+          showUploadError('Network error. Please try again.');
+          console.error('Error:', err);
+        });
+    }
+
+    function showUploadError(message) {
+      const error = document.getElementById('uploadError');
+      error.textContent = message;
+      error.style.display = 'block';
+    }
+
+    // Load gallery from server
+    function loadGallery() {
+      const galleryLoading = document.getElementById('galleryLoading');
+      galleryLoading.style.display = 'block';
+
+      fetch('/gallery-data')
+        .then(response => response.json())
+        .then(data => {
+          galleryLoading.style.display = 'none';
+          renderGallery(data.images);
+        })
+        .catch(err => {
+          galleryLoading.style.display = 'none';
+          console.error('Error loading gallery:', err);
+          document.getElementById('gallery').innerHTML = '<strong>Error loading gallery.</strong>';
+        });
+    }
+
+    function renderGallery(images) {
+      const gallery = document.getElementById('gallery');
+      const galleryEmpty = document.getElementById('galleryEmpty');
+
+      if (images.length === 0) {
+        gallery.innerHTML = '';
+        galleryEmpty.style.display = 'block';
+        return;
+      }
+
+      galleryEmpty.style.display = 'none';
+      gallery.innerHTML = images.map(image => `
+                <div class="gallery-item" onclick="openModal('${image.filename}', '/uploads/${image.filename}', '${escapeHtml(image.caption)}')">
+                    <img src="/uploads/${image.filename}" alt="${escapeHtml(image.caption)}" class="gallery-item-image">
+                    <div class="gallery-item-info">
+                        <div class="gallery-item-caption">${escapeHtml(image.caption)}</div>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    function openModal(filename, imageUrl, caption) {
+      currentImage = {
+        filename: filename,
+        src: imageUrl,
+        caption: caption
+      };
+
+      document.getElementById('modalImage').src = imageUrl;
+      document.getElementById('modalCaption').textContent = caption;
+      document.getElementById('modal').classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('show');
+      currentImage = null;
+    }
+
+    function deleteImage() {
+      if (!currentImage) return;
+
+      if (!confirm('Are you sure you want to delete this image?')) {
+        return;
+      }
+
+      fetch('/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ filename: currentImage.filename })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            closeModal();
+            loadGallery();
+          } else {
+            alert('Error deleting image: ' + (data.error || 'Unknown error'));
+          }
+        })
+        .catch(err => {
+          alert('Network error. Please try again.');
+          console.error('Error:', err);
+        });
+    }
+
+    // Close modal when clicking overlay
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('modal');
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
         }
-        
-        function uploadFile(file) {
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            // Show loading
-            loading.style.display = 'block';
-            result.style.display = 'none';
-            error.style.display = 'none';
-            
-            fetch('/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                loading.style.display = 'none';
-                
-                if (data.success) {
-                    document.getElementById('resultImage').src = data.image;
-                    document.getElementById('caption').textContent = data.caption;
-                    result.style.display = 'block';
-                } else {
-                    showError(data.error || 'An error occurred while processing the image.');
-                }
-            })
-            .catch(err => {
-                loading.style.display = 'none';
-                showError('Network error. Please try again.');
-                console.error('Error:', err);
-            });
-        }
-        
-        function showError(message) {
-            error.textContent = message;
-            error.style.display = 'block';
-            result.style.display = 'none';
-        }
-    </script>
+      });
+    });
+
+    // Utility function to escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
 </body>
+
 </html>
